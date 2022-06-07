@@ -30,4 +30,16 @@
         android:layout_marginTop="2dp"
         android:layout_toEndOf="@+id/ivProfileImage"
         tools:text="This is my tweet." />
+
+    <ImageView
+        android:id="@+id/ivMedia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvBody"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/ivProfileImage"
+        android:maxHeight="300dp"
+        android:adjustViewBounds="true"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
 </RelativeLayout>
