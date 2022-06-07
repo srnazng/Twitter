@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/compose"
-        android:icon="@drawable/ic_vector_compose"
+        android:icon="@drawable/vector_compose_fab"
         android:title="Compose"
         app:showAsAction="always" />
 </menu>

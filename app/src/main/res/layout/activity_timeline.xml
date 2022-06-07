@@ -12,6 +12,7 @@
         android:layout_height="50dp"
         android:text="@string/logout_label"
         android:onClick="finish"
+        android:background="@color/dark_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
