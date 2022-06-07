@@ -86,8 +86,9 @@ public class TimelineActivity extends AppCompatActivity {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.compose:
-                Toast.makeText(this, "Compose", Toast.LENGTH_SHORT).show();
                 // navigate to the compose activity
+                Intent intent = new Intent(this, ComposeActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

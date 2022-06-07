@@ -12,6 +12,8 @@ public class ComposeActivity extends AppCompatActivity {
     EditText etCompose;
     Button btnTweet;
 
+    public static final int MAX_TWEET_LENGTH = 140;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +31,7 @@ public class ComposeActivity extends AppCompatActivity {
                     Toast.makeText(ComposeActivity.this, "Tweet empty", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if(tweetContent.length() > 140){
+                if(tweetContent.length() > MAX_TWEET_LENGTH){
                     Toast.makeText(ComposeActivity.this, "Tweet too long", Toast.LENGTH_LONG).show();
                     return;
                 }
