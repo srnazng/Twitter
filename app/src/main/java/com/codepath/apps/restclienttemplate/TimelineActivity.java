@@ -23,11 +23,12 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import okhttp3.Headers;
 
 public class TimelineActivity extends AppCompatActivity {
-    public static final String TAG = "TimeLine Activity";
+    public static final String TAG = "Timeline Activity";
     private final int REQUEST_CODE = 20;
     TwitterClient client;
     RecyclerView rvTweets;
@@ -35,6 +36,8 @@ public class TimelineActivity extends AppCompatActivity {
     TweetsAdapter adapter;
 
     private SwipeRefreshLayout swipeContainer;
+
+    MenuItem miActionProgressItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +68,7 @@ public class TimelineActivity extends AppCompatActivity {
                 // Your code to refresh the list here.
                 // Make sure you call swipeContainer.setRefreshing(false)
                 // once the network request has completed successfully.
+                Log.d(TAG, "refresh");
                 fetchTimelineAsync(0);
             }
         });
@@ -90,6 +94,10 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     private void populateHomeTimeline() {
+        if(miActionProgressItem != null){
+            showProgressBar();
+        }
+
         client.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
@@ -101,6 +109,9 @@ public class TimelineActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     Log.e(TAG, "Json exception", e);
                     e.printStackTrace();
+                }
+                if(miActionProgressItem != null){
+                    hideProgressBar();
                 }
             }
 
@@ -115,6 +126,7 @@ public class TimelineActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        miActionProgressItem = menu.findItem(R.id.miActionProgress);
         return true;
     }
 
@@ -162,5 +174,25 @@ public class TimelineActivity extends AppCompatActivity {
     public void finish(View view) {
         onLogoutButton();
         client.clearAccessToken();
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // Store instance of the menu item containing progress
+        miActionProgressItem = menu.findItem(R.id.miActionProgress);
+
+        // Return to finish
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    public void showProgressBar() {
+        // Show progress item
+        miActionProgressItem.setVisible(true);
+        Log.d(TAG, "show progress bar");
+    }
+
+    public void hideProgressBar() {
+        // Hide progress item
+        miActionProgressItem.setVisible(false);
     }
 }
