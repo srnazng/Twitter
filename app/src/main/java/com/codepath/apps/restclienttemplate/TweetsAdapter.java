@@ -74,6 +74,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         ImageView ivMedia;
         TextView tvTimestamp;
         ImageButton btnReply;
+        ImageView ivIcon;
+        TextView tvLabel;
 
         public ViewHolder(@NonNull View itemView){
             super(itemView);
@@ -83,12 +85,15 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             ivMedia = itemView.findViewById(R.id.ivMedia);
             tvTimestamp = itemView.findViewById(R.id.tvTimestamp);
             btnReply = itemView.findViewById(R.id.btnReply);
+            ivIcon = itemView.findViewById(R.id.ivIcon);
+            tvLabel = itemView.findViewById(R.id.tvLabel);
         }
 
         public void bind(Tweet tweet){
             tvBody.setText(tweet.body);
             tvScreenName.setText(tweet.user.screenName);
             Glide.with(context).load(tweet.user.profileImageUrl).transform(new RoundedCorners(100)).into(ivProfileImage);
+
             if(!tweet.media_url.isEmpty()){
                 ivMedia.setVisibility(View.VISIBLE);
                 Glide.with(context).load(tweet.media_url).into(ivMedia);
@@ -96,6 +101,18 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             else{
                 ivMedia.setVisibility(View.GONE);
             }
+
+            if(!tweet.in_reply_to_screen_name.isEmpty()){
+                ivIcon.setImageResource(R.drawable.reply);
+                ivIcon.setVisibility(View.VISIBLE);
+                tvLabel.setText("Reply to @" + tweet.in_reply_to_screen_name);
+                tvLabel.setVisibility(View.VISIBLE);
+            }
+            else{
+                ivIcon.setVisibility(View.GONE);
+                tvLabel.setVisibility(View.GONE);
+            }
+
             tvTimestamp.setText(getRelativeTimeAgo(tweet.created_at));
 
             btnReply.setOnClickListener(new View.OnClickListener() {

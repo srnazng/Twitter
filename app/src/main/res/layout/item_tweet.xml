@@ -7,18 +7,41 @@
     android:padding="10dp">
 
     <ImageView
+        android:id="@+id/ivIcon"
+        android:layout_width="32dp"
+        android:layout_height="23dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/reply" />
+
+    <TextView
+        android:id="@+id/tvLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="2dp"
+        android:layout_toEndOf="@+id/ivIcon"
+        android:layout_weight="1"
+        tools:text="Reply to @user" />
+
+    <ImageView
         android:id="@+id/ivProfileImage"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_below="@+id/tvLabel"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/tvScreenName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/tvLabel"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:layout_toEndOf="@+id/ivProfileImage"
         tools:text="serenazeng3" />
 
@@ -28,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvScreenName"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="10dp"
         android:layout_toEndOf="@+id/ivProfileImage"
         tools:text="This is my tweet." />
 
@@ -38,7 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvBody"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:layout_toEndOf="@+id/ivProfileImage"
         android:adjustViewBounds="true"
         android:maxHeight="300dp"
@@ -48,18 +71,19 @@
         android:id="@+id/tvTimestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/tvLabel"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
         tools:text="just now" />
 
     <ImageButton
         android:id="@+id/btnReply"
-        android:layout_width="50dp"
-        android:layout_height="40dp"
+        android:layout_width="60dp"
+        android:layout_height="45dp"
         android:layout_below="@+id/ivMedia"
         android:layout_toEndOf="@+id/ivProfileImage"
         android:background="@color/extra_extra_light_gray"
-        android:onClick="reply"
         android:scaleX="0.3"
         android:scaleY="0.3"
         app:srcCompat="@drawable/reply" />

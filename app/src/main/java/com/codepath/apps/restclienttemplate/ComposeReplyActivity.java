@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
@@ -23,25 +24,28 @@ public class ComposeReplyActivity extends AppCompatActivity {
     EditText etCompose;
     Button btnTweet;
     TwitterClient client;
+    TextView label;
     Tweet origTweet;
 
     public static final int MAX_TWEET_LENGTH = 140;
-    public static final String TAG = "ComposeActivity";
+    public static final String TAG = "ComposeReplyActivity";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_compose);
+        setContentView(R.layout.activity_compose_reply);
 
         Log.e(TAG, getIntent().toString());
         origTweet = Parcels.unwrap(getIntent().getParcelableExtra("tweet")) ;
 
         etCompose = findViewById(R.id.etCompose);
         btnTweet = findViewById(R.id.btnTweet);
+        label = findViewById(R.id.label);
         client = TwitterApp.getRestClient(this);
 
-        etCompose.setText("@" + origTweet.getUser().screenName);
+        etCompose.setText("@" + origTweet.getUser().screenName + " ");
+        label.setText("Reply to @" + origTweet.user.screenName);
 
         // set click listener on button
         btnTweet.setOnClickListener(new View.OnClickListener() {
@@ -63,7 +67,7 @@ public class ComposeReplyActivity extends AppCompatActivity {
                         Log.i(TAG, "onSuccess to publish tweet reply " + statusCode);
                         try {
                             Tweet tweet = Tweet.fromJson(json.jsonObject);
-                            Log.i(TAG, "Published tweet reply says: " + tweet);
+                            Log.i(TAG, "Published tweet reply says: " + tweetContent);
                             Intent intent = new Intent();
                             intent.putExtra("tweet", Parcels.wrap(tweet));
                             setResult(RESULT_OK, intent);
