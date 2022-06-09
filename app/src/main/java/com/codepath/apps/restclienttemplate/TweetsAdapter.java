@@ -107,6 +107,27 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvScreenName.setText("@" + tweet.user.screenName);
             Glide.with(context).load(tweet.user.profileImageUrl).transform(new RoundedCorners(100)).into(ivProfileImage);
 
+            ivProfileImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                   toProfile(tweet);
+                }
+            });
+
+            tvName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    toProfile(tweet);
+                }
+            });
+
+            tvScreenName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    toProfile(tweet);
+                }
+            });
+
             if(!tweet.media_url.isEmpty()){
                 ivMedia.setVisibility(View.VISIBLE);
                 Glide.with(context).load(tweet.media_url).into(ivMedia);
@@ -251,6 +272,11 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
+    public void toProfile(Tweet tweet){
+        Intent intent = new Intent(context, ProfileActivity.class);
+        intent.putExtra("tweet", Parcels.wrap(tweet));
+        context.startActivity(intent);
+    }
 
     private static final int SECOND_MILLIS = 1000;
     private static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
