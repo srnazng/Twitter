@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="10dp">
+    android:background="@drawable/textlines"
+    android:paddingTop="10dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
 
     <ImageView
         android:id="@+id/ivIcon"
@@ -12,8 +15,10 @@
         android:layout_height="23dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:layout_marginBottom="10dp"
         android:layout_weight="1"
-        app:srcCompat="@drawable/reply" />
+        app:srcCompat="@drawable/ic_vector_retweet"
+        app:tint="@color/light_gray" />
 
     <TextView
         android:id="@+id/tvLabel"
@@ -21,9 +26,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginTop="2dp"
+        android:layout_marginBottom="10dp"
         android:layout_toEndOf="@+id/ivIcon"
         android:layout_weight="1"
-        tools:text="Reply to @user" />
+        android:textSize="12sp"
+        tools:text="You retweeted" />
 
     <ImageView
         android:id="@+id/ivProfileImage"
@@ -32,7 +39,7 @@
         android:layout_below="@+id/tvLabel"
         android:layout_alignParentStart="true"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="0dp"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -41,7 +48,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvLabel"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
         android:layout_toEndOf="@+id/ivProfileImage"
         tools:text="serenazeng3" />
 
@@ -49,7 +55,7 @@
         android:id="@+id/tvBody"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvScreenName"
+        android:layout_below="@+id/tvReply"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_toEndOf="@+id/ivProfileImage"
@@ -71,34 +77,63 @@
         android:id="@+id/tvTimestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvLabel"
+        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="0dp"
         android:layout_marginEnd="10dp"
+        android:textSize="10sp"
         tools:text="just now" />
 
     <ImageButton
         android:id="@+id/btnReply"
         android:layout_width="60dp"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
         android:layout_below="@+id/ivMedia"
         android:layout_toEndOf="@+id/ivProfileImage"
         android:background="@color/extra_extra_light_gray"
+        android:contentDescription="@string/app_name"
         android:scaleX="0.3"
         android:scaleY="0.3"
         app:srcCompat="@drawable/reply" />
+
+    <ImageButton
+        android:id="@+id/btnRetweet"
+        android:layout_width="50dp"
+        android:layout_height="48dp"
+        android:layout_below="@+id/ivMedia"
+        android:layout_alignParentEnd="true"
+        android:background="@color/extra_extra_light_gray"
+        android:contentDescription="@string/app_name"
+        android:minWidth="48dp"
+        android:scaleX="0.5"
+        android:scaleY="0.5"
+        app:srcCompat="@drawable/ic_vector_retweet_stroke"
+        app:tint="@color/light_gray" />
 
     <ImageButton
         android:id="@+id/btnFavorite"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_below="@+id/ivMedia"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="10dp"
+        android:layout_marginStart="1dp"
+        android:layout_toStartOf="@+id/btnRetweet"
+        android:layout_toEndOf="@+id/btnReply"
         android:background="@color/extra_extra_light_gray"
+        android:contentDescription="@string/app_name"
         android:minWidth="48dp"
         android:scaleX="0.5"
         android:scaleY="0.5"
         app:srcCompat="@drawable/ic_vector_heart_stroke"
         app:tint="@color/light_gray" />
+
+    <TextView
+        android:id="@+id/tvReply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvScreenName"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/ivProfileImage"
+        android:textSize="10sp"
+        tools:text="Reply to @user" />
 </RelativeLayout>

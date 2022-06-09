@@ -1,9 +1,7 @@
 package com.codepath.apps.restclienttemplate;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +10,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -25,7 +18,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
-import org.json.JSONException;
 import org.parceler.Parcels;
 
 import java.text.ParseException;
@@ -79,10 +71,18 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         TextView tvScreenName;
         ImageView ivMedia;
         TextView tvTimestamp;
+
+        // bottom buttons
         ImageButton btnReply;
         ImageButton btnFavorite;
+        ImageButton btnRetweet;
+
+        // header
         ImageView ivIcon;
         TextView tvLabel;
+
+        // reply to
+        TextView tvReply;
 
         public ViewHolder(@NonNull View itemView){
             super(itemView);
@@ -93,8 +93,10 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvTimestamp = itemView.findViewById(R.id.tvTimestamp);
             btnReply = itemView.findViewById(R.id.btnReply);
             btnFavorite = itemView.findViewById(R.id.btnFavorite);
+            btnRetweet = itemView.findViewById(R.id.btnRetweet);
             ivIcon = itemView.findViewById(R.id.ivIcon);
             tvLabel = itemView.findViewById(R.id.tvLabel);
+            tvReply = itemView.findViewById(R.id.tvReply);
         }
 
         public void bind(Tweet tweet){
@@ -111,9 +113,17 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             }
 
             if(!tweet.in_reply_to_screen_name.isEmpty()){
-                ivIcon.setImageResource(R.drawable.reply);
+                tvReply.setText("Reply to @" + tweet.in_reply_to_screen_name);
+                tvReply.setVisibility(View.VISIBLE);
+            }
+            else{
+                tvReply.setVisibility(View.GONE);
+            }
+
+            if(tweet.retweeted){
+                ivIcon.setImageResource(R.drawable.ic_vector_retweet);
                 ivIcon.setVisibility(View.VISIBLE);
-                tvLabel.setText("Reply to @" + tweet.in_reply_to_screen_name);
+                tvLabel.setText("You retweeted");
                 tvLabel.setVisibility(View.VISIBLE);
             }
             else{
@@ -169,6 +179,55 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                             @Override
                             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                                 Log.e(TAG, "onFailure to favorite tweet", throwable);
+                            }
+                        });
+                    }
+                }
+            });
+
+            if(tweet.retweeted){
+                btnRetweet.setImageResource(R.drawable.ic_vector_retweet);
+            }
+            else{
+                btnRetweet.setImageResource(R.drawable.ic_vector_retweet_stroke);
+            }
+
+            btnRetweet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(tweet.isRetweeted()){
+                        client.unretweet(tweet.id, new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                                Log.i(TAG, "onSuccess unretweet" + statusCode);
+                                tweet.setRetweeted(false);
+                                btnRetweet.setImageResource(R.drawable.ic_vector_retweet_stroke);
+                                ivIcon.setVisibility(View.GONE);
+                                tvLabel.setVisibility(View.GONE);
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                                Log.e(TAG, "onFailure unretweet", throwable);
+                            }
+                        });
+                    }
+                    else{
+                        client.retweet(tweet.id, new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                                Log.i(TAG, "onSuccess retweet" + statusCode);
+                                tweet.setRetweeted(true);
+                                btnRetweet.setImageResource(R.drawable.ic_vector_retweet);
+                                ivIcon.setImageResource(R.drawable.ic_vector_retweet);
+                                ivIcon.setVisibility(View.VISIBLE);
+                                tvLabel.setText("You retweeted");
+                                tvLabel.setVisibility(View.VISIBLE);
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                                Log.e(TAG, "onFailure retweet", throwable);
                             }
                         });
                     }
