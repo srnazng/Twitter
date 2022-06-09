@@ -23,7 +23,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
+import org.json.JSONException;
 import org.parceler.Parcels;
 
 import java.text.ParseException;
@@ -31,16 +33,20 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
+import okhttp3.Headers;
+
 public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder> {
     private final int REQUEST_CODE = 20;
     private final String TAG = "TweetsAdapter";
 
     Context context;
     List<Tweet> tweets;
+    TwitterClient client;
 
     public TweetsAdapter(Context context, List<Tweet> tweets){
         this.context = context;
         this.tweets = tweets;
+        client = TwitterApp.getRestClient(context);
     }
 
     // for each row inflate the layout
@@ -74,6 +80,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         ImageView ivMedia;
         TextView tvTimestamp;
         ImageButton btnReply;
+        ImageButton btnFavorite;
         ImageView ivIcon;
         TextView tvLabel;
 
@@ -85,6 +92,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             ivMedia = itemView.findViewById(R.id.ivMedia);
             tvTimestamp = itemView.findViewById(R.id.tvTimestamp);
             btnReply = itemView.findViewById(R.id.btnReply);
+            btnFavorite = itemView.findViewById(R.id.btnFavorite);
             ivIcon = itemView.findViewById(R.id.ivIcon);
             tvLabel = itemView.findViewById(R.id.tvLabel);
         }
@@ -121,6 +129,49 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                     Intent intent = new Intent(context, ComposeReplyActivity.class);
                     intent.putExtra("tweet", Parcels.wrap(tweet));
                     context.startActivity(intent);
+                }
+            });
+
+            if(tweet.favorited){
+                btnFavorite.setImageResource(R.drawable.ic_vector_heart);
+            }
+            else{
+                btnFavorite.setImageResource(R.drawable.ic_vector_heart_stroke);
+            }
+
+            btnFavorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(tweet.isFavorited()){
+                        client.unfavoriteTweet(tweet.id, new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                                Log.i(TAG, "onSuccess to unfavorite tweet" + statusCode);
+                                tweet.setFavorited(false);
+                                btnFavorite.setImageResource(R.drawable.ic_vector_heart_stroke);
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                                Log.e(TAG, "onFailure to unfavorite tweet", throwable);
+                            }
+                        });
+                    }
+                    else{
+                        client.favoriteTweet(tweet.id, new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                                Log.i(TAG, "onSuccess to favorite tweet" + statusCode);
+                                tweet.setFavorited(true);
+                                btnFavorite.setImageResource(R.drawable.ic_vector_heart);
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                                Log.e(TAG, "onFailure to favorite tweet", throwable);
+                            }
+                        });
+                    }
                 }
             });
         }
