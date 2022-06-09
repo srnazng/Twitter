@@ -135,14 +135,13 @@ public class TimelineActivity extends AppCompatActivity {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.compose:
-                // navigate to the compose activity
-                Intent intent = new Intent(this, ComposeActivity.class);
-                startActivityForResult(intent, REQUEST_CODE);
-                return true;
+                return compose();
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -174,6 +173,13 @@ public class TimelineActivity extends AppCompatActivity {
     public void finish(View view) {
         onLogoutButton();
         client.clearAccessToken();
+    }
+
+    public boolean compose(){
+        // navigate to the compose activity
+        Intent intent = new Intent(this, ComposeActivity.class);
+        startActivityForResult(intent, REQUEST_CODE);
+        return true;
     }
 
     @Override

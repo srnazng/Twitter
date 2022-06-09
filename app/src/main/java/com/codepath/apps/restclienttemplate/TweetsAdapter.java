@@ -1,18 +1,30 @@
 package com.codepath.apps.restclienttemplate;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.text.format.Time;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+
+import org.parceler.Parcels;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,6 +32,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder> {
+    private final int REQUEST_CODE = 20;
+    private final String TAG = "TweetsAdapter";
 
     Context context;
     List<Tweet> tweets;
@@ -59,6 +73,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         TextView tvScreenName;
         ImageView ivMedia;
         TextView tvTimestamp;
+        ImageButton btnReply;
 
         public ViewHolder(@NonNull View itemView){
             super(itemView);
@@ -67,6 +82,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvScreenName = itemView.findViewById(R.id.tvScreenName);
             ivMedia = itemView.findViewById(R.id.ivMedia);
             tvTimestamp = itemView.findViewById(R.id.tvTimestamp);
+            btnReply = itemView.findViewById(R.id.btnReply);
         }
 
         public void bind(Tweet tweet){
@@ -81,6 +97,15 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                 ivMedia.setVisibility(View.GONE);
             }
             tvTimestamp.setText(getRelativeTimeAgo(tweet.created_at));
+
+            btnReply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, ComposeReplyActivity.class);
+                    intent.putExtra("tweet", Parcels.wrap(tweet));
+                    context.startActivity(intent);
+                }
+            });
         }
     }
 
