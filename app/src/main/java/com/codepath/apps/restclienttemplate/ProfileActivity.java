@@ -2,8 +2,10 @@ package com.codepath.apps.restclienttemplate;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,6 +24,8 @@ public class ProfileActivity extends AppCompatActivity {
     TextView tvProfileScreenName;
     TextView tvFollowingValue;
     TextView tvFollowersValue;
+    TextView tvFollowing;
+    TextView tvFollowers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,8 @@ public class ProfileActivity extends AppCompatActivity {
         tvProfileScreenName = findViewById(R.id.tvProfileScreenName);
         tvFollowersValue = findViewById(R.id.tvFollowersValue);
         tvFollowingValue = findViewById(R.id.tvFollowingValue);
+        tvFollowers = findViewById(R.id.tvFollowers);
+        tvFollowing = findViewById(R.id.tvFollowing);
 
         Glide.with(this).load(profile.profileImageUrl).transform(new RoundedCorners(200)).into(ivProfile);
 
@@ -43,6 +49,48 @@ public class ProfileActivity extends AppCompatActivity {
         tvProfileScreenName.setText("@" + profile.getScreenName());
         tvFollowersValue.setText(withSuffix(profile.getFollowersCount()));
         tvFollowingValue.setText(withSuffix(profile.getFriendsCount()));
+
+        tvFollowingValue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                followingList();
+            }
+        });
+
+        tvFollowing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                followingList();
+            }
+        });
+
+        tvFollowersValue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                followerList();
+            }
+        });
+
+        tvFollowers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                followerList();
+            }
+        });
+    }
+
+    public void followerList(){
+        Intent intent = new Intent(this, ListActivity.class);
+        intent.putExtra("User", Parcels.wrap(profile));
+        intent.putExtra("label", "Followers");
+        startActivity(intent);
+    }
+
+    public void followingList(){
+        Intent intent = new Intent(this, ListActivity.class);
+        intent.putExtra("User", Parcels.wrap(profile));
+        intent.putExtra("label", "Following");
+        startActivity(intent);
     }
 
     public static String withSuffix(long count) {

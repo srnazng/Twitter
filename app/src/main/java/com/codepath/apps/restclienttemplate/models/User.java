@@ -2,9 +2,13 @@ package com.codepath.apps.restclienttemplate.models;
 
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Parcel
 public class User {
@@ -25,6 +29,14 @@ public class User {
         user.friendsCount = jsonObject.getInt("friends_count");
 
         return user;
+    }
+
+    public static List<User> fromJsonArray(JSONArray jsonArray) throws JSONException{
+        List<User> users = new ArrayList<>();
+        for(int i=0; i<jsonArray.length(); i++){
+            users.add(fromJson(jsonArray.getJSONObject(i)));
+        }
+        return users;
     }
 
     public String getName() {

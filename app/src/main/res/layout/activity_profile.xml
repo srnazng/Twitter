@@ -42,8 +42,8 @@
         android:id="@+id/tvFollowing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
         android:layout_marginTop="25dp"
+        android:paddingLeft="5dp"
         android:text="@string/following"
         app:layout_constraintStart_toEndOf="@+id/tvFollowingValue"
         app:layout_constraintTop_toBottomOf="@+id/tvProfileScreenName" />
@@ -52,8 +52,8 @@
         android:id="@+id/tvFollowers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
         android:layout_marginTop="25dp"
+        android:paddingLeft="5dp"
         android:text="@string/followers"
         app:layout_constraintStart_toEndOf="@+id/tvFollowersValue"
         app:layout_constraintTop_toBottomOf="@+id/tvProfileScreenName" />
